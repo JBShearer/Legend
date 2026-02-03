@@ -41,6 +41,26 @@ position = Vector2(320, 160)
 [node name="BattleOverlay" parent="." instance=ExtResource("5_5lf9a")]
 visible = false
 
+[node name="Hud" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="HudBackground" type="ColorRect" parent="Hud"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+color = Color(0.07, 0.18, 0.07, 1)
+
+[node name="HudLabel" type="Label" parent="Hud"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 12.0
+text = "HUD ACTIVE"
+
 [node name="DebugLabel" type="Label" parent="."]
 anchors_preset = 10
 anchor_right = 1.0
