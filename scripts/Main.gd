@@ -9,8 +9,6 @@ var in_combat := false
 var proximity_triggered := false
 
 func _ready() -> void:
-	if debug_label:
-		debug_label.text = "Main ready"
 	_setup_enemy_idle()
 	player.connect("combat_started", _on_combat_started)
 	for child in enemies.get_children():

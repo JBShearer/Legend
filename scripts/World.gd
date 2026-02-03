@@ -29,15 +29,15 @@ func _setup_tileset() -> void:
 	tileset.tile_size = Vector2i(tile_size, tile_size)
 	self.tile_set = tileset
 
-	grass_source_id = _add_solid_source(tileset, GRASS_COLOR)
-	path_source_id = _add_solid_source(tileset, PATH_COLOR)
-	border_source_id = _add_solid_source(tileset, BORDER_COLOR)
-	plaza_source_id = _add_solid_source(tileset, PLAZA_COLOR)
-	house_source_id = _add_solid_source(tileset, HOUSE_COLOR)
+	grass_source_id = _add_solid_source(tileset, GRASS_COLOR, false)
+	path_source_id = _add_solid_source(tileset, PATH_COLOR, false)
+	border_source_id = _add_solid_source(tileset, BORDER_COLOR, true)
+	plaza_source_id = _add_solid_source(tileset, PLAZA_COLOR, false)
+	house_source_id = _add_solid_source(tileset, HOUSE_COLOR, true)
 
 
 
-func _add_solid_source(tileset: TileSet, color: Color) -> int:
+func _add_solid_source(tileset: TileSet, color: Color, has_collision: bool) -> int:
 	var atlas_texture := ImageTexture.create_from_image(_make_solid_tile(color))
 	var source := TileSetAtlasSource.new()
 	source.texture = atlas_texture
@@ -48,7 +48,7 @@ func _add_solid_source(tileset: TileSet, color: Color) -> int:
 	var tile_data := source.get_tile_data(atlas_coords, 0)
 	if tile_data:
 		tile_data.material = null
-		if source_id == border_source_id:
+		if has_collision:
 			var polygon := PackedVector2Array([
 				Vector2(0, 0),
 				Vector2(tile_size, 0),
