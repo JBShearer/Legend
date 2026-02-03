@@ -15,15 +15,15 @@ func _ready() -> void:
 	if runtime_label:
 		var used_cells := 0
 		if world:
-			if world.has_method("_generate_town"):
-				world.call("_generate_town")
-			if world.has_method("_build_colliders"):
-				world.call("_build_colliders")
+			if world.has_method("generate_town"):
+				world.call("generate_town")
+			if world.has_method("build_world_colliders"):
+				world.call("build_world_colliders")
 			used_cells = world.get_used_cells(0).size()
 		var method_flags := [
 			world != null,
-			world.has_method("_generate_town"),
-			world.has_method("_build_colliders")
+			world.has_method("generate_town"),
+			world.has_method("build_world_colliders")
 		]
 		runtime_label.text = "Main ready | World cells: %d | World ok: %s" % [used_cells, method_flags]
 	player.connect("combat_started", _on_combat_started)

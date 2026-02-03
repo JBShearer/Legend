@@ -26,6 +26,15 @@ func _ready() -> void:
 	_update_debug_label()
 
 
+func generate_town() -> void:
+	_generate_town()
+	_update_debug_label()
+
+
+func build_world_colliders() -> void:
+	_build_colliders()
+
+
 func _setup_tileset() -> void:
 	var tileset := TileSet.new()
 	tileset.tile_size = Vector2i(tile_size, tile_size)
