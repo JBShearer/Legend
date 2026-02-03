@@ -3,7 +3,7 @@ extends Node2D
 @onready var player: CharacterBody2D = $Player
 @onready var battle_overlay: CanvasLayer = $BattleOverlay
 @onready var enemies: Node2D = $Enemies
-@onready var debug_label: Label = $DebugLabel
+@onready var debug_label: Label = $Hud/DebugLabel
 
 var in_combat := false
 var proximity_triggered := false

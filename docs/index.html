@@ -89,21 +89,6 @@ body {
 	text-align: center;
 	z-index: 1;
 }
-
-#debug-overlay {
-	position: absolute;
-	top: 8px;
-	left: 8px;
-	padding: 8px 12px;
-	background: rgba(0, 0, 0, 0.65);
-	color: #7CFF7C;
-	font-family: monospace;
-	font-size: 12px;
-	border-radius: 6px;
-	z-index: 3;
-	max-width: 90vw;
-	white-space: pre-wrap;
-}
 		</style>
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
@@ -113,8 +98,6 @@ body {
 		<canvas id="canvas">
 			Your browser does not support the canvas tag.
 		</canvas>
-
-		<div id="debug-overlay">Booting...</div>
 
 		<noscript>
 			Your browser does not support JavaScript.
@@ -128,17 +111,7 @@ body {
 
 		<script src="index.js"></script>
 		<script>
-const debugOverlay = document.getElementById('debug-overlay');
-const pushDebug = (message) => {
-	if (!debugOverlay) {
-		return;
-	}
-	const now = new Date().toISOString().split('T')[1].split('Z')[0];
-	debugOverlay.textContent += `\n[${now}] ${message}`;
-};
-
-pushDebug('JS loaded');
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":3413156,"index.wasm":37686550},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":3413172,"index.wasm":37686550},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -177,7 +150,6 @@ const engine = new Engine(GODOT_CONFIG);
 	}
 
 	function displayFailureNotice(err) {
-		pushDebug('Start failed. Check console for details.');
 		console.error(err);
 		if (err instanceof Error) {
 			setStatusNotice(err.message);
@@ -227,7 +199,6 @@ const engine = new Engine(GODOT_CONFIG);
 		}
 	} else {
 		setStatusMode('progress');
-		pushDebug('Starting Godot runtime...');
 		engine.startGame({
 			'onProgress': function (current, total) {
 				if (current > 0 && total > 0) {
@@ -239,7 +210,6 @@ const engine = new Engine(GODOT_CONFIG);
 				}
 			},
 		}).then(() => {
-			pushDebug('Godot runtime started.');
 			setStatusMode('hidden');
 		}, displayFailureNotice);
 	}
