@@ -20,6 +20,7 @@ func _ready() -> void:
 	_setup_tileset()
 	_ensure_layer()
 	_generate_town()
+	_set_ready_message()
 	_update_debug_label()
 
 
@@ -133,3 +134,9 @@ func _update_debug_label() -> void:
 		if tile_set:
 			sources = tile_set.get_source_count()
 		debug_label.text = "Tiles: %d | Sources: %d | Layers: %d" % [used_cells, sources, get_layers_count()]
+
+
+func _set_ready_message() -> void:
+	var debug_label := get_parent().get_node_or_null("Hud/DebugLabel")
+	if debug_label and debug_label is Label:
+		debug_label.text = "World ready"

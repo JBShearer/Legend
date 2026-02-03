@@ -21,6 +21,12 @@ z_index = -1
 [node name="Player" parent="." instance=ExtResource("1_yrqyx")]
 position = Vector2(0, 0)
 
+[node name="TestSprite" type="Sprite2D" parent="."]
+texture = ExtResource("3_0lqgt")
+modulate = Color(1, 0.2, 0.2, 1)
+scale = Vector2(0.2, 0.2)
+position = Vector2(120, 0)
+
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
 position = Vector2(0, 0)
