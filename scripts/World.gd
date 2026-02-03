@@ -22,6 +22,7 @@ func _ready() -> void:
 	_setup_tileset()
 	_ensure_layer()
 	_generate_town()
+	_update_debug_label()
 
 
 func _setup_tileset() -> void:
@@ -30,14 +31,13 @@ func _setup_tileset() -> void:
 	var physics_layer_id := tileset.add_physics_layer()
 	tileset.set_physics_layer_collision_layer(physics_layer_id, 1)
 	tileset.set_physics_layer_collision_mask(physics_layer_id, 1)
+	self.tile_set = tileset
 
 	grass_source_id = _add_solid_source(tileset, GRASS_COLOR)
 	path_source_id = _add_solid_source(tileset, PATH_COLOR)
 	border_source_id = _add_solid_source(tileset, BORDER_COLOR)
 	plaza_source_id = _add_solid_source(tileset, PLAZA_COLOR)
 	house_source_id = _add_solid_source(tileset, HOUSE_COLOR)
-
-	self.tile_set = tileset
 
 
 
@@ -74,6 +74,8 @@ func _make_solid_tile(color: Color) -> Image:
 func _ensure_layer() -> void:
 	if get_layers_count() == 0:
 		add_layer(0)
+	set_layer_enabled(0, true)
+	set_layer_modulate(0, Color.WHITE)
 
 
 func _generate_town() -> void:
@@ -126,3 +128,13 @@ func _draw_houses(offset: Vector2i) -> void:
 			for y in house_size.y:
 				var cell := Vector2i(pos.x + x, pos.y + y) + offset
 				set_cell(0, cell, house_source_id, Vector2i(0, 0))
+
+
+func _update_debug_label() -> void:
+	var debug_label := get_parent().get_node_or_null("DebugLabel")
+	if debug_label and debug_label is Label:
+		var used_cells := get_used_cells(0).size()
+		var sources := 0
+		if tile_set:
+			sources = tile_set.get_source_count()
+		debug_label.text = "Tiles: %d | Sources: %d | Layers: %d" % [used_cells, sources, get_layers_count()]
