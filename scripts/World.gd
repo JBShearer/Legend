@@ -15,11 +15,13 @@ var path_source_id: int = -1
 var border_source_id: int = -1
 var plaza_source_id: int = -1
 var house_source_id: int = -1
+var collision_root: Node2D
 
 func _ready() -> void:
 	_setup_tileset()
 	_ensure_layer()
 	_generate_town()
+	_build_colliders()
 	_set_ready_message()
 	_update_debug_label()
 
@@ -27,22 +29,17 @@ func _ready() -> void:
 func _setup_tileset() -> void:
 	var tileset := TileSet.new()
 	tileset.tile_size = Vector2i(tile_size, tile_size)
-	if tileset.get_physics_layers_count() == 0:
-		tileset.add_physics_layer()
-	if tileset.get_physics_layers_count() > 0:
-		tileset.set_physics_layer_collision_layer(0, 1)
-		tileset.set_physics_layer_collision_mask(0, 1)
 	self.tile_set = tileset
 
-	grass_source_id = _add_solid_source(tileset, GRASS_COLOR, false)
-	path_source_id = _add_solid_source(tileset, PATH_COLOR, false)
-	border_source_id = _add_solid_source(tileset, BORDER_COLOR, true)
-	plaza_source_id = _add_solid_source(tileset, PLAZA_COLOR, false)
-	house_source_id = _add_solid_source(tileset, HOUSE_COLOR, true)
+	grass_source_id = _add_solid_source(tileset, GRASS_COLOR)
+	path_source_id = _add_solid_source(tileset, PATH_COLOR)
+	border_source_id = _add_solid_source(tileset, BORDER_COLOR)
+	plaza_source_id = _add_solid_source(tileset, PLAZA_COLOR)
+	house_source_id = _add_solid_source(tileset, HOUSE_COLOR)
 
 
 
-func _add_solid_source(tileset: TileSet, color: Color, has_collision: bool) -> int:
+func _add_solid_source(tileset: TileSet, color: Color) -> int:
 	var atlas_texture := ImageTexture.create_from_image(_make_solid_tile(color))
 	var source := TileSetAtlasSource.new()
 	source.texture = atlas_texture
@@ -53,15 +50,6 @@ func _add_solid_source(tileset: TileSet, color: Color, has_collision: bool) -> i
 	var tile_data := source.get_tile_data(atlas_coords, 0)
 	if tile_data:
 		tile_data.material = null
-		if has_collision:
-			var polygon := PackedVector2Array([
-				Vector2(0, 0),
-				Vector2(tile_size, 0),
-				Vector2(tile_size, tile_size),
-				Vector2(0, tile_size)
-			])
-			tile_data.set_collision_polygons_count(0, 1)
-			tile_data.set_collision_polygon(0, 0, polygon)
 
 	return source_id
 
@@ -77,24 +65,26 @@ func _ensure_layer() -> void:
 		add_layer(0)
 	set_layer_enabled(0, true)
 	set_layer_modulate(0, Color.WHITE)
-	collision_layer = 1
+	collision_layer = 0
 	collision_mask = 0
 
 
 func _generate_town() -> void:
 	clear()
 	var offset := Vector2i(-map_width / 2, -map_height / 2)
+	var world_offset := Vector2(offset.x * tile_size, offset.y * tile_size)
 	for x in map_width:
 		for y in map_height:
 			var is_border := x == 0 or y == 0 or x == map_width - 1 or y == map_height - 1
 			if is_border:
 				set_cell(0, Vector2i(x, y) + offset, border_source_id, Vector2i(0, 0))
+				_append_collider(world_offset, Vector2i(x, y))
 				continue
 			set_cell(0, Vector2i(x, y) + offset, grass_source_id, Vector2i(0, 0))
 
 	_draw_roads(offset)
 	_draw_plaza(offset)
-	_draw_houses(offset)
+	_draw_houses(offset, world_offset)
 
 
 func _draw_roads(offset: Vector2i) -> void:
@@ -117,7 +107,7 @@ func _draw_plaza(offset: Vector2i) -> void:
 			set_cell(0, cell, plaza_source_id, Vector2i(0, 0))
 
 
-func _draw_houses(offset: Vector2i) -> void:
+func _draw_houses(offset: Vector2i, world_offset: Vector2) -> void:
 	var house_size := Vector2i(4, 3)
 	var padding := Vector2i(4, 4)
 	var positions := [
@@ -131,6 +121,7 @@ func _draw_houses(offset: Vector2i) -> void:
 			for y in house_size.y:
 				var cell := Vector2i(pos.x + x, pos.y + y) + offset
 				set_cell(0, cell, house_source_id, Vector2i(0, 0))
+				_append_collider(world_offset, Vector2i(pos.x + x, pos.y + y))
 
 
 func _update_debug_label() -> void:
@@ -147,3 +138,27 @@ func _set_ready_message() -> void:
 	var debug_label := get_parent().get_node_or_null("Hud/DebugLabel")
 	if debug_label and debug_label is Label:
 		debug_label.text = "World ready"
+
+
+func _build_colliders() -> void:
+	if collision_root:
+		collision_root.queue_free()
+	collision_root = Node2D.new()
+	collision_root.name = "WorldColliders"
+	add_child(collision_root)
+
+
+func _append_collider(world_offset: Vector2, grid_pos: Vector2i) -> void:
+	if collision_root == null:
+		return
+	var body := StaticBody2D.new()
+	body.collision_layer = 1
+	body.collision_mask = 1
+	var shape := CollisionShape2D.new()
+	var rect := RectangleShape2D.new()
+	rect.size = Vector2(tile_size, tile_size)
+	shape.shape = rect
+	body.add_child(shape)
+	shape.position = Vector2(tile_size * 0.5, tile_size * 0.5)
+	body.position = world_offset + Vector2(grid_pos.x * tile_size, grid_pos.y * tile_size)
+	collision_root.add_child(body)
