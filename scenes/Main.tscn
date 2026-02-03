@@ -24,8 +24,8 @@ position = Vector2(0, 0)
 [node name="TestSprite" type="Sprite2D" parent="."]
 texture = ExtResource("3_0lqgt")
 modulate = Color(1, 0.2, 0.2, 1)
-scale = Vector2(0.2, 0.2)
-position = Vector2(120, 0)
+scale = Vector2(0.6, 0.6)
+position = Vector2(160, 0)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
@@ -65,11 +65,11 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_left = 12.0
 offset_top = 64.0
-text = "HUD ACTIVE"
+text = "HUD ACTIVE (STATIC)"
 
 [node name="DebugLabel" type="Label" parent="Hud"]
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 12.0
 offset_top = 88.0
-text = ""
+text = "DEBUG LABEL STATIC"
