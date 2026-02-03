@@ -37,6 +37,7 @@ offset_left = 24.0
 offset_top = 0.0
 offset_right = -24.0
 offset_bottom = -24.0
+mouse_filter = 0
 
 [node name="MenuMargin" type="MarginContainer" parent="Menu"]
 anchors_preset = 15
@@ -65,6 +66,11 @@ theme_override_font_sizes/font_size = 28
 [node name="NinjaHPMenu" type="Label" parent="Menu/MenuMargin/MenuVBox/HPRow"]
 text = "Ninja HP: 100"
 theme_override_font_sizes/font_size = 28
+
+[node name="ActionLog" type="Label" parent="Menu/MenuMargin/MenuVBox"]
+text = "Action: Ready"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
 
 [node name="Punch" type="Button" parent="Menu/MenuMargin/MenuVBox"]
 text = "Punch"

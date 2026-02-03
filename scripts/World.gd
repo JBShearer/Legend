@@ -27,6 +27,8 @@ func _ready() -> void:
 func _setup_tileset() -> void:
 	var tileset := TileSet.new()
 	tileset.tile_size = Vector2i(tile_size, tile_size)
+	if tileset.get_physics_layers_count() == 0:
+		tileset.add_physics_layer()
 	self.tile_set = tileset
 
 	grass_source_id = _add_solid_source(tileset, GRASS_COLOR, false)
@@ -72,6 +74,8 @@ func _ensure_layer() -> void:
 		add_layer(0)
 	set_layer_enabled(0, true)
 	set_layer_modulate(0, Color.WHITE)
+	collision_layer = 1
+	collision_mask = 0
 
 
 func _generate_town() -> void:

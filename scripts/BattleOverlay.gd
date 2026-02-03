@@ -9,6 +9,7 @@ extends CanvasLayer
 @onready var ninja_hp_label: Label = $HUD/NinjaHP
 @onready var kdee_hp_menu: Label = $Menu/MenuMargin/MenuVBox/HPRow/KDeeHPMenu
 @onready var ninja_hp_menu: Label = $Menu/MenuMargin/MenuVBox/HPRow/NinjaHPMenu
+@onready var action_log: Label = $Menu/MenuMargin/MenuVBox/ActionLog
 
 signal end_turn
 signal battle_over(winner: String)
@@ -38,11 +39,13 @@ func play_idle() -> void:
 
 
 func play_punch() -> void:
+	action_log.text = "Action: Punch"
 	kdee_sprite.play("punch")
 	_resolve_player_attack(player_damage)
 
 
 func play_kick() -> void:
+	action_log.text = "Action: Kick"
 	kdee_sprite.play("kick")
 	_resolve_player_attack(player_damage + 6)
 
@@ -54,6 +57,7 @@ func _connect_buttons() -> void:
 
 
 func _on_end_pressed() -> void:
+	action_log.text = "Action: End Turn"
 	_end_player_turn()
 
 
@@ -125,6 +129,7 @@ func start_battle() -> void:
 	_update_hp_bars()
 	turn_state = TurnState.PLAYER
 	_set_menu_enabled(true)
+	action_log.text = "Action: Ready"
 	play_idle()
 
 
