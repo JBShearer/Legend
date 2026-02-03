@@ -64,15 +64,16 @@ func _make_solid_tile(color: Color) -> Image:
 
 func _generate_ground() -> void:
 	clear()
+	var offset := Vector2i(-map_width / 2, -map_height / 2)
 	for x in map_width:
 		for y in map_height:
 			var is_border := x == 0 or y == 0 or x == map_width - 1 or y == map_height - 1
 			if is_border:
-				set_cell(0, Vector2i(x, y), BORDER_SOURCE_ID, Vector2i(0, 0))
+				set_cell(0, Vector2i(x, y) + offset, BORDER_SOURCE_ID, Vector2i(0, 0))
 				continue
 
 			var is_path := y == map_height / 2 or x == map_width / 2
 			if is_path:
-				set_cell(0, Vector2i(x, y), PATH_SOURCE_ID, Vector2i(0, 0))
+				set_cell(0, Vector2i(x, y) + offset, PATH_SOURCE_ID, Vector2i(0, 0))
 			else:
-				set_cell(0, Vector2i(x, y), GRASS_SOURCE_ID, Vector2i(0, 0))
+				set_cell(0, Vector2i(x, y) + offset, GRASS_SOURCE_ID, Vector2i(0, 0))
