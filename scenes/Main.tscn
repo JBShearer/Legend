@@ -68,3 +68,10 @@ anchor_right = 1.0
 offset_left = 12.0
 offset_top = 88.0
 text = ""
+
+[node name="RuntimeLabel" type="Label" parent="Hud"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 112.0
+text = ""

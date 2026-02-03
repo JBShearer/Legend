@@ -4,12 +4,19 @@ extends Node2D
 @onready var battle_overlay: CanvasLayer = $BattleOverlay
 @onready var enemies: Node2D = $Enemies
 @onready var debug_label: Label = $Hud/DebugLabel
+@onready var runtime_label: Label = $Hud/RuntimeLabel
+@onready var world: TileMap = $World
 
 var in_combat := false
 var proximity_triggered := false
 
 func _ready() -> void:
 	_setup_enemy_idle()
+	if runtime_label:
+		var used_cells := 0
+		if world:
+			used_cells = world.get_used_cells(0).size()
+		runtime_label.text = "Main ready | World cells: %d" % used_cells
 	player.connect("combat_started", _on_combat_started)
 	for child in enemies.get_children():
 		var detector := child.get_node_or_null("CombatDetector")
