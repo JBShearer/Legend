@@ -20,11 +20,13 @@ func _ready() -> void:
 	collision_layer = 1
 	collision_mask = 1
 	_setup_tileset()
+	_ensure_layer()
 	_generate_town()
 
 
 func _setup_tileset() -> void:
 	var tileset := TileSet.new()
+	tileset.tile_size = Vector2i(tile_size, tile_size)
 	var physics_layer_id := tileset.add_physics_layer()
 	tileset.set_physics_layer_collision_layer(physics_layer_id, 1)
 	tileset.set_physics_layer_collision_mask(physics_layer_id, 1)
@@ -36,7 +38,6 @@ func _setup_tileset() -> void:
 	house_source_id = _add_solid_source(tileset, HOUSE_COLOR)
 
 	self.tile_set = tileset
-	self.tile_set.tile_size = Vector2i(tile_size, tile_size)
 
 
 
@@ -68,6 +69,11 @@ func _make_solid_tile(color: Color) -> Image:
 	var image := Image.create(tile_size, tile_size, false, Image.FORMAT_RGBA8)
 	image.fill(color)
 	return image
+
+
+func _ensure_layer() -> void:
+	if get_layers_count() == 0:
+		add_layer(0)
 
 
 func _generate_town() -> void:
