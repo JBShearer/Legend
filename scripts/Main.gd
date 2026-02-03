@@ -15,8 +15,17 @@ func _ready() -> void:
 	if runtime_label:
 		var used_cells := 0
 		if world:
+			if world.has_method("_generate_town"):
+				world.call("_generate_town")
+			if world.has_method("_build_colliders"):
+				world.call("_build_colliders")
 			used_cells = world.get_used_cells(0).size()
-		runtime_label.text = "Main ready | World cells: %d" % used_cells
+		var method_flags := [
+			world != null,
+			world.has_method("_generate_town"),
+			world.has_method("_build_colliders")
+		]
+		runtime_label.text = "Main ready | World cells: %d | World ok: %s" % [used_cells, method_flags]
 	player.connect("combat_started", _on_combat_started)
 	for child in enemies.get_children():
 		var detector := child.get_node_or_null("CombatDetector")
