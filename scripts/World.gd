@@ -131,7 +131,16 @@ func _update_debug_label() -> void:
 		var sources := 0
 		if tile_set:
 			sources = tile_set.get_source_count()
-		debug_label.text = "Tiles: %d | Sources: %d | Layers: %d" % [used_cells, sources, get_layers_count()]
+		debug_label.text = "Tiles: %d | Sources: %d | Layers: %d | IDs: %d/%d/%d/%d/%d" % [
+			used_cells,
+			sources,
+			get_layers_count(),
+			grass_source_id,
+			path_source_id,
+			border_source_id,
+			plaza_source_id,
+			house_source_id
+		]
 
 
 func _set_ready_message() -> void:
