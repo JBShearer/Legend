@@ -126,7 +126,7 @@ func _draw_houses(offset: Vector2i) -> void:
 
 
 func _update_debug_label() -> void:
-	var debug_label := get_parent().get_node_or_null("DebugLabel")
+	var debug_label := get_parent().get_node_or_null("Hud/DebugLabel")
 	if debug_label and debug_label is Label:
 		var used_cells := get_used_cells(0).size()
 		var sources := 0
