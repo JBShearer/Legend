@@ -114,9 +114,9 @@ func _update_layout() -> void:
 	kdee_sprite.position = left_pos
 	enemy_sprite.position = right_pos
 
-	var scale_factor: float = clampf(size.x / 900.0, 0.8, 1.6)
-	kdee_sprite.scale = Vector2.ONE * (1.3 * scale_factor)
-	enemy_sprite.scale = Vector2.ONE * (0.9 * scale_factor)
+	var scale_factor: float = clampf(size.x / 900.0, 0.9, 2.4)
+	kdee_sprite.scale = Vector2.ONE * (2.6 * scale_factor)
+	enemy_sprite.scale = Vector2.ONE * (1.8 * scale_factor)
 
 
 func start_battle() -> void:

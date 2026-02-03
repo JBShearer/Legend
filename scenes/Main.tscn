@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="1_yrqyx"]
+[ext_resource type="Script" path="res://scripts/World.gd" id="2_p1n6s"]
+[ext_resource type="Texture2D" path="res://icon.svg" id="3_0lqgt"]
+[ext_resource type="Script" path="res://scripts/Main.gd" id="4_qafp0"]
+[ext_resource type="PackedScene" path="res://scenes/BattleOverlay.tscn" id="5_5lf9a"]
+[ext_resource type="PackedScene" path="res://scenes/Ninja.tscn" id="6_ninja"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 16.0
+
+[node name="Main" type="Node2D"]
+script = ExtResource("4_qafp0")
+
+[node name="World" type="TileMap" parent="."]
+tile_set = null
+script = ExtResource("2_p1n6s")
+z_index = -1
+
+[node name="Player" parent="." instance=ExtResource("1_yrqyx")]
+position = Vector2(0, 0)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+current = true
+position = Vector2(0, 0)
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Ninja1" parent="Enemies" instance=ExtResource("6_ninja")]
+position = Vector2(-160, -48)
+
+[node name="Ninja2" parent="Enemies" instance=ExtResource("6_ninja")]
+position = Vector2(220, -120)
+
+[node name="Ninja3" parent="Enemies" instance=ExtResource("6_ninja")]
+position = Vector2(320, 160)
+
+[node name="BattleOverlay" parent="." instance=ExtResource("5_5lf9a")]
+visible = false
+
+[node name="DebugLabel" type="Label" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 12.0
+text = ""

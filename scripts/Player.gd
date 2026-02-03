@@ -15,6 +15,7 @@ var state: PlayerState = PlayerState.EXPLORATION
 var combat_timer: float = 0.0
 var touch_target: Vector2 = Vector2.ZERO
 var has_touch_target := false
+var combat_locked := false
 
 func _physics_process(_delta: float) -> void:
 	if state == PlayerState.TURN_COMBAT:
@@ -86,6 +87,7 @@ func _add_frame_sequence(frames: SpriteFrames, anim: String, base_path: String, 
 func _on_combat_body_entered(_body: Node) -> void:
 	if state == PlayerState.EXPLORATION:
 		state = PlayerState.TURN_COMBAT
+		combat_locked = true
 		combat_timer = combat_lock_duration
 		velocity = Vector2.ZERO
 		_update_animation(Vector2.ZERO)
@@ -93,6 +95,8 @@ func _on_combat_body_entered(_body: Node) -> void:
 
 
 func _handle_turn_combat(delta: float) -> void:
+	if combat_locked:
+		return
 	combat_timer -= delta
 	if combat_timer <= 0.0:
 		state = PlayerState.EXPLORATION
@@ -123,9 +127,11 @@ func _input(event: InputEvent) -> void:
 
 
 func set_combat_locked(locked: bool) -> void:
+	combat_locked = locked
 	if locked:
 		state = PlayerState.TURN_COMBAT
 		velocity = Vector2.ZERO
 		_update_animation(Vector2.ZERO)
 	else:
 		state = PlayerState.EXPLORATION
+		combat_timer = 0.0
