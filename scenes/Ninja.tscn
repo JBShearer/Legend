@@ -10,6 +10,8 @@ height = 20.0
 radius = 48.0
 
 [node name="Ninja" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
 script = ExtResource("1_krn7x")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

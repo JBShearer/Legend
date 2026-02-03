@@ -13,12 +13,17 @@ const PATH_SOURCE_ID := 1
 const BORDER_SOURCE_ID := 2
 
 func _ready() -> void:
+	collision_layer = 1
+	collision_mask = 1
 	_setup_tileset()
 	_generate_ground()
 
 
 func _setup_tileset() -> void:
 	var tileset := TileSet.new()
+	var physics_layer_id := tileset.add_physics_layer()
+	tileset.set_physics_layer_collision_layer(physics_layer_id, 1)
+	tileset.set_physics_layer_collision_mask(physics_layer_id, 1)
 
 	_add_solid_source(tileset, GRASS_COLOR)
 	_add_solid_source(tileset, PATH_COLOR)
@@ -41,14 +46,12 @@ func _add_solid_source(tileset: TileSet, color: Color) -> void:
 	if tile_data:
 		tile_data.material = null
 		if source_id == BORDER_SOURCE_ID:
-			tile_data.physics_polygons_count = 1
 			var polygon := PackedVector2Array([
 				Vector2(0, 0),
 				Vector2(tile_size, 0),
 				Vector2(tile_size, tile_size),
 				Vector2(0, tile_size)
 			])
-			tile_data.set_physics_polygon(0, polygon)
 			tile_data.set_collision_polygons_count(0, 1)
 			tile_data.set_collision_polygon(0, 0, polygon)
 

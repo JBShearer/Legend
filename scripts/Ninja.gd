@@ -59,9 +59,16 @@ func _start_roam() -> void:
 
 func _ensure_bounds() -> void:
 	var pos := global_position
-	pos.x = clampf(pos.x, roam_bounds.position.x, roam_bounds.position.x + roam_bounds.size.x)
-	pos.y = clampf(pos.y, roam_bounds.position.y, roam_bounds.position.y + roam_bounds.size.y)
-	global_position = pos
+	var min_x := roam_bounds.position.x
+	var max_x := roam_bounds.position.x + roam_bounds.size.x
+	var min_y := roam_bounds.position.y
+	var max_y := roam_bounds.position.y + roam_bounds.size.y
+
+	var clamped_x := clampf(pos.x, min_x, max_x)
+	var clamped_y := clampf(pos.y, min_y, max_y)
+	if clamped_x != pos.x or clamped_y != pos.y:
+		global_position = Vector2(clamped_x, clamped_y)
+		roam_direction = (roam_direction * -1.0).normalized()
 
 
 func _update_facing() -> void:
