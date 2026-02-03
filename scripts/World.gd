@@ -29,10 +29,9 @@ func _setup_tileset() -> void:
 	tileset.tile_size = Vector2i(tile_size, tile_size)
 	if tileset.get_physics_layers_count() == 0:
 		tileset.add_physics_layer()
-	var layer := tileset.get_physics_layer(0)
-	if layer:
-		layer.collision_layer = 1
-		layer.collision_mask = 1
+	if tileset.get_physics_layers_count() > 0:
+		tileset.set_physics_layer_collision_layer(0, 1)
+		tileset.set_physics_layer_collision_mask(0, 1)
 	self.tile_set = tileset
 
 	grass_source_id = _add_solid_source(tileset, GRASS_COLOR, false)
